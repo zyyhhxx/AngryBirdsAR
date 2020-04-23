@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DragObject : MonoBehaviour
 {
+    public float drag = 5;
     Vector3 screenPoint;
     Vector3 offset;
     Vector3 scanPos;
@@ -39,6 +40,7 @@ public class DragObject : MonoBehaviour
         screenPoint = Camera.main.WorldToScreenPoint(scanPos);
         Debug.Log(screenPoint);
         offset = scanPos - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+        offset.z += drag;
 
         SlingshotManager.instance.aimer.eulerAngles = new Vector3(90, 0, 0);
         //SlingshotManager.instance.setPath(true);
@@ -65,7 +67,7 @@ public class DragObject : MonoBehaviour
     void ResetDirection()
     {
         SlingshotManager.instance.aimer.eulerAngles = new Vector3(90, 0, 0);
-        SlingshotManager.instance.setPath(false);
+        //SlingshotManager.instance.setPath(false);
         SlingshotManager.instance.ObjectHolder.GetComponent<Collider>().enabled = true;
     }
 

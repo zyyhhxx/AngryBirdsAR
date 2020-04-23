@@ -16,7 +16,7 @@ public class SlingshotManager : MonoBehaviour
     public LineRenderer leftLine;
     public LineRenderer rightLine;
     public GameObject[] points;
-    public float speed;
+    public float unitSpeed;
 
     public static SlingshotManager instance;
 
@@ -54,11 +54,11 @@ public class SlingshotManager : MonoBehaviour
         }
     }
 
-    public void throwBall()
+    public void throwBall(Vector3 direction)
     {
         ObjectHolder.GetComponent<Collider>().enabled = false;
         GameObject clone = Instantiate(ammoPrefab, ammoPlaceHolder.transform.position, Quaternion.identity, parent);
-        clone.GetComponent<Rigidbody>().AddForce(aimer.up * speed, ForceMode.Impulse);
+        clone.GetComponent<Rigidbody>().AddForce(direction * unitSpeed, ForceMode.Impulse);
         Destroy(clone, 3f);
     }
 }

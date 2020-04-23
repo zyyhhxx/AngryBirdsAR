@@ -55,10 +55,11 @@ public class DragObject : MonoBehaviour
     {
         _isRotating = false;
 
-        transform.position = scanPos;
-
-        SlingshotManager.instance.throwBall();
+        var direction = scanPos - transform.position;
+        Debug.Log(direction);
+        SlingshotManager.instance.throwBall(direction);
         Invoke("ResetDirection", 1f);
+        transform.position = scanPos;
     }
 
     void ResetDirection()

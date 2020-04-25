@@ -6,18 +6,25 @@ public class EnemyController : MonoBehaviour
 {
 	private float setup_time = 0.2f;
 	private float start_time;
+    private float death_time = 0.0f;
 
-    private float HP = 100;
+    public ParticleSystem effect;
+    public float HP = 100;
+
     // Start is called before the first frame update
     void Start()
     {
+        effect.Stop();
         start_time = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (death_time != 0.0f && Time.time > death_time + 0.5f){
+            Debug.Log("death:" + death_time);
+            Destroy(this.gameObject);
+        }
     }
 
     void OnCollisionEnter(Collision other)
@@ -30,12 +37,16 @@ public class EnemyController : MonoBehaviour
                 GetDamage(50);
             }
     	}
+
+
     }
 
-    void GetDamage(float damage){
+    public void GetDamage(float damage){
         HP -= damage;
         if (HP <= 0){
-            Destroy(this.gameObject);
+            effect.Play();
+            effect.enableEmission = true;
+            death_time = Time.time;
         }
         // Debug.Log("HP: " + HP);
     }

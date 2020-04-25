@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-	private float setup_time = 0.5f;
+	private float setup_time = 0.2f;
 	private float start_time;
+
+    private float HP = 100;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,10 +20,23 @@ public class EnemyController : MonoBehaviour
         
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision other)
     {
     	if (Time.time > start_time + setup_time){
-        	Destroy(this.gameObject);
+            if (other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("Player")){
+                GetDamage(100);
+            }else{
+                // Debug.Log("Hit something?");
+                GetDamage(50);
+            }
     	}
+    }
+
+    void GetDamage(float damage){
+        HP -= damage;
+        if (HP <= 0){
+            Destroy(this.gameObject);
+        }
+        // Debug.Log("HP: " + HP);
     }
 }

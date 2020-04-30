@@ -14,7 +14,7 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        effect.Stop();
+        //effect.Stop();
         start_time = Time.time;
     }
 
@@ -44,8 +44,8 @@ public class EnemyController : MonoBehaviour
     public void GetDamage(float damage){
         HP -= damage;
         if (HP <= 0){
-            effect.Play();
-            effect.enableEmission = true;
+            //effect.Play();
+            //effect.enableEmission = true;
             death_time = Time.time;
         }
         // Debug.Log("HP: " + HP);

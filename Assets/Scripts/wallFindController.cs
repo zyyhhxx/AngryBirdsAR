@@ -62,6 +62,10 @@ public class wallFindController : MonoBehaviour
                 newWayPointer.transform.rotation = Quaternion.LookRotation(newDirection);
                 */
 
+
+
+                
+
             }
         }
     }

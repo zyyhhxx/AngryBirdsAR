@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Ammo : MonoBehaviour
 {
+    public float damage = 50;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +20,11 @@ public class Ammo : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        var ec = collision.gameObject.GetComponent<EnemyController>();
+        if (ec)
+        {
+            ec.GetDamage(damage);
+        }
         Destroy(gameObject);
     }
 }

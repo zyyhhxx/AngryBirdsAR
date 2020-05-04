@@ -8,7 +8,7 @@ public class WayPointerController : MonoBehaviour
     // Start is called before the first frame update
     //public GameObject map;
     // method 2: 
-    private float lifttime = 10.0f;
+    private float lifttime = 3.0f;
     bool processing = false;
     private GameObject camera;
    

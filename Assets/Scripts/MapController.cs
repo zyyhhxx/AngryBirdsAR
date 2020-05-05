@@ -35,7 +35,8 @@ public class MapController : MonoBehaviour
   	private bool secondSceneFound = false;
 
   	// the reference standard value of step
-	private float step = 0.1f;
+	public float step = 0.1f;
+    public float arrowScale = 1;
 	private float lifttime = 3.0f;
 
 	//HashSet<GameObject> wayPointers = new HashSet<GameObject>();
@@ -118,6 +119,7 @@ public class MapController : MonoBehaviour
 		    tempPosition = Vector3.MoveTowards(tempObject.position, target.position, positionStep);
 		  	GameObject tempWayPointer = (GameObject)Instantiate(arrowPointerPrefab, tempPosition, tempRotation);
 		  	tempObject = tempWayPointer.transform;
+            tempObject.transform.localScale = new Vector3(arrowScale, arrowScale, arrowScale);
 		    // method 2: lookAt: rotation
 		    tempObject.transform.LookAt(target);
 		}

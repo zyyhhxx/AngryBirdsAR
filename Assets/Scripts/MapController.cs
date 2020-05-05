@@ -11,8 +11,6 @@ public class MapController : MonoBehaviour
 	
 	//public GameObject sceneObject1;
 	//public GameObject sceneObject2;
-	
-	public Text testInfo;
 
     // the gameobject of the current player
     // we can set this object to the singleshot object
@@ -37,7 +35,7 @@ public class MapController : MonoBehaviour
   	// the reference standard value of step
 	public float step = 0.1f;
     public float arrowScale = 1;
-	private float lifttime = 3.0f;
+    public float lifttime = 1.0f;
 
 	//HashSet<GameObject> wayPointers = new HashSet<GameObject>();
 	// the first viewPoint1
@@ -69,9 +67,6 @@ public class MapController : MonoBehaviour
 		}
 		*/
 
-
-		// test the currentobject transform changing
-		testInfo.text = "the current position of the first scene" + viewPoint2.transform.position.ToString(); 
 		// all targets are fixed:
 		if(firstSceneFound && secondSceneFound){
 			// record the relative position
@@ -84,15 +79,14 @@ public class MapController : MonoBehaviour
 			// arrow pointing from the firstScene to secondScene
 			canDraw = false;
 			drawTrail(transform1, transform2);
-			testInfo.text = "pointing from target 1 to target 2";
 		}
 		else if(canDraw &&!firstSceneFound && secondSceneFound && allTargetsRegistered){
 			// arrow pointing form the secondScene to the firstScene
 			canDraw = false;
 			drawTrail(transform2, transform1);
-			testInfo.text = "pointing from target 2 to target 1";
 		}
 
+        Debug.Log((firstSceneFound, secondSceneFound, allTargetsRegistered, canDraw));
 	}
 
 	void drawTrail(Transform start, Transform target){

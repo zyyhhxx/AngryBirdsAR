@@ -35,26 +35,19 @@ public class MapController : MonoBehaviour
   	// the reference standard value of step
 	public float step = 0.1f;
     public float arrowScale = 1;
-    public float lifttime = 1.0f;
 
-	//HashSet<GameObject> wayPointers = new HashSet<GameObject>();
-	// the first viewPoint1
-	private Transform transform1;
+    private List<GameObject> arrows = new List<GameObject>();
+
+    //HashSet<GameObject> wayPointers = new HashSet<GameObject>();
+    // the first viewPoint1
+    private Transform transform1;
 	private Transform transform2;
-
-
 	private bool allTargetsRegistered = false;
-
-
-	void Start()
-	{
-
-	}
 
 	// Update is called once per frame
 	void Update()
-	{	
-		/*
+	{
+        /*
 		if(canDraw && firstSceneFound && flag == 1){
 			canDraw = false;
 	  		testInfo.text = "have draw the first scene";
@@ -66,6 +59,10 @@ public class MapController : MonoBehaviour
 	  		drawTrail(viewPoint2.transform);
 		}
 		*/
+        // Erase all arrows
+        foreach (var arrow in arrows)
+            Destroy(arrow);
+        arrows.Clear();
 
 		// all targets are fixed:
 		if(firstSceneFound && secondSceneFound){
@@ -76,17 +73,11 @@ public class MapController : MonoBehaviour
 
 		}
 		else if(canDraw && firstSceneFound && !secondSceneFound && allTargetsRegistered){
-			// arrow pointing from the firstScene to secondScene
-			canDraw = false;
 			drawTrail(transform1, transform2);
 		}
 		else if(canDraw &&!firstSceneFound && secondSceneFound && allTargetsRegistered){
-			// arrow pointing form the secondScene to the firstScene
-			canDraw = false;
 			drawTrail(transform2, transform1);
 		}
-
-        Debug.Log((firstSceneFound, secondSceneFound, allTargetsRegistered, canDraw));
 	}
 
 	void drawTrail(Transform start, Transform target){
@@ -116,26 +107,8 @@ public class MapController : MonoBehaviour
             tempObject.transform.localScale = new Vector3(arrowScale, arrowScale, arrowScale);
 		    // method 2: lookAt: rotation
 		    tempObject.transform.LookAt(target);
-		}
-
-
-		StartCoroutine(ExampleCoroutine());
-	}
-
-	// clicked, move to the next playground
-	public void OnClickPass(){
-		if(flag == 1){
-			flag = 2;
-			canDraw = true;
-		}
-	}
-
-	// clicked, move to the previous playground
-	public void OnClickBack(){
-		if(flag == 2){
-			flag = 1;
-			canDraw = true;
-		}
+            arrows.Add(tempWayPointer);
+        }
 	}
 
 	// recognize if scenes have been recognized in the field of camera view
@@ -152,16 +125,5 @@ public class MapController : MonoBehaviour
 	public void LostTarget2(){
 	  secondSceneFound = false;
 	}
-
-	//every fixed frequence, update the wayfinding pointers
-	IEnumerator ExampleCoroutine()
-	{
-	  //yield on a new YieldInstruction that waits for 5 seconds.
-	  yield return new WaitForSeconds(lifttime);
-	  canDraw = true;
-	}
-
-
-
 }
 

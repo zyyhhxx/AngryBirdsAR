@@ -9,86 +9,62 @@ public class DragObject : MonoBehaviour
     Vector3 offset;
     Vector3 scanPos;
 
-    private float _sensitivity;
-    private Vector3 _mouseReference;
-    private Vector3 _mouseOffset;
-    private Vector3 _rotation;
-    private bool _isRotating;
-
     // Start is called before the first frame update
     void Start()
     {
         scanPos = transform.position;
-
-        _sensitivity = 40f;
-        _rotation = Vector3.zero;
     }
 
     // Update is called once per frame
     void Update()
     {
-        SetDirection();
-    }
-
-    void OnMouseDown()
-    {
-        // rotating flag
-        _isRotating = true;
-        // store mouse
-        _mouseReference = transform.position;
-
-        screenPoint = Camera.main.WorldToScreenPoint(scanPos);
-        Debug.Log(screenPoint);
-        offset = scanPos - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
-        offset.z += drag;
-
-        SlingshotManager.instance.aimer.eulerAngles = new Vector3(90, 0, 0);
-        //SlingshotManager.instance.setPath(true);
-    }
-
-    void OnMouseDrag()
-    {
-        Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-        Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
-        transform.position = curPosition;
-    }
-
-    void OnMouseUp()
-    {
-        _isRotating = false;
-
-        var direction = scanPos - transform.position;
-        Debug.Log(direction);
-        SlingshotManager.instance.throwBall(direction);
-        Invoke("ResetDirection", 1f);
-        transform.position = scanPos;
-    }
-
-    void ResetDirection()
-    {
-        SlingshotManager.instance.aimer.eulerAngles = new Vector3(90, 0, 0);
-        //SlingshotManager.instance.setPath(false);
-        SlingshotManager.instance.ObjectHolder.GetComponent<Collider>().enabled = true;
-    }
-
-    void SetDirection()
-    {
-        if (_isRotating)
+        if (Input.touchCount > 0)
         {
-            // offset
-            _mouseOffset = (transform.position - _mouseReference);
+            Touch touch = Input.GetTouch(0);
 
-            // apply rotation
-            _rotation.x = (_mouseOffset.y) * _sensitivity;
-            _rotation.z = (_mouseOffset.x) * _sensitivity;
-
-            // rotate
-            SlingshotManager.instance.aimer.Rotate(new Vector3(_rotation.x, 0f, 0f), Space.World);
-            SlingshotManager.instance.aimer.Rotate(new Vector3(0f, _rotation.y, _rotation.z), Space.Self);
-
-            // store mouse
-            _mouseReference = transform.position;
-
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    screenPoint = Camera.main.WorldToScreenPoint(scanPos);
+                    offset = scanPos - Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, screenPoint.z));
+                    offset.z += drag;
+                    SlingshotManager.instance.aimer.eulerAngles = new Vector3(90, 0, 0);
+                    break;
+                case TouchPhase.Moved:
+                    Vector3 curScreenPoint = new Vector3(touch.position.x, touch.position.y, screenPoint.z);
+                    Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
+                    transform.position = curPosition;
+                    break;
+                case TouchPhase.Ended:
+                    var direction = scanPos - transform.position;
+                    SlingshotManager.instance.throwBall(direction);
+                    Invoke("ResetDirection", 1f);
+                    transform.position = scanPos;
+                    break;
+            }
+        }
+        else
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                screenPoint = Camera.main.WorldToScreenPoint(scanPos);
+                offset = scanPos - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+                offset.z += drag;
+                SlingshotManager.instance.aimer.eulerAngles = new Vector3(90, 0, 0);
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
+                Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
+                transform.position = curPosition;
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                var direction = scanPos - transform.position;
+                SlingshotManager.instance.throwBall(direction);
+                Invoke("ResetDirection", 1f);
+                transform.position = scanPos;
+            }
         }
     }
 }

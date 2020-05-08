@@ -6,11 +6,13 @@ using Vuforia;
 public class ChildrenActivator : MonoBehaviour, ITrackableEventHandler
 {
     private TrackableBehaviour trackableBehaviour;
+    private GravityPivot gp;
 
     // Start is called before the first frame update
     void Start()
     {
         trackableBehaviour = GetComponent<TrackableBehaviour>();
+        gp = GetComponent<GravityPivot>();
 
         if (trackableBehaviour)
             trackableBehaviour.RegisterTrackableEventHandler(this);
@@ -37,6 +39,7 @@ public class ChildrenActivator : MonoBehaviour, ITrackableEventHandler
     {
         if (transform.childCount > 0)
             SetChildrenActive(true);
+        gp.enabled = true;
     }
 
     private void onTrackingLost()
